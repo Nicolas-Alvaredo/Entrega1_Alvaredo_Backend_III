@@ -2,11 +2,12 @@ import { faker } from '@faker-js/faker';
 import bcrypt from 'bcrypt';
 
 export const generateUsersMock = async (amount = 50) => {
-  const hashedPassword = await bcrypt.hash("coder123", 10);
+  const safeAmount = Math.min(amount, 100); // Evita números excesivos
 
+  const hashedPassword = await bcrypt.hash("coder123", 10);
   const roles = ["user", "admin"];
 
-  const users = Array.from({ length: amount }, () => ({
+  return Array.from({ length: safeAmount }, () => ({
     first_name: faker.person.firstName(),
     last_name: faker.person.lastName(),
     email: faker.internet.email(),
@@ -14,6 +15,5 @@ export const generateUsersMock = async (amount = 50) => {
     role: faker.helpers.arrayElement(roles),
     pets: []
   }));
-
-  return users;
 };
+
